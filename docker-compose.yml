@@ -1,0 +1,11 @@
+services:
+  oaf:
+    build: .
+    container_name: openagent-federation
+    ports:
+      - "8787:8787"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
