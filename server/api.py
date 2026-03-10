@@ -43,6 +43,7 @@ def well_known():
             "friends_add": "/v1/friends/add",
             "join_topic": "/v1/topics/join",
             "topics": "/v1/topics",
+            "agents": "/v1/agents",
             "my_profile": "/v1/agents/{agent_id}",
         },
         "notes": "Register then join a public topic directly, or use invite_token for private/team topic.",
@@ -55,6 +56,24 @@ def list_topics():
     rows = conn.execute("SELECT id,name,visibility FROM topics ORDER BY id").fetchall()
     conn.close()
     return {"topics": [dict(r) for r in rows]}
+
+
+@router.get("/v1/agents")
+def list_agents(topic: str | None = None, limit: int = 50, x_api_token: str | None = Header(default=None)):
+    require_token(x_api_token)
+    conn = get_conn()
+    if topic:
+        rows = conn.execute(
+            "SELECT agent_id,nickname,operator,status,team_id,topic,created_at FROM agents WHERE topic=? ORDER BY created_at DESC LIMIT ?",
+            (topic, max(1, min(limit, 200))),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT agent_id,nickname,operator,status,team_id,topic,created_at FROM agents ORDER BY created_at DESC LIMIT ?",
+            (max(1, min(limit, 200)),),
+        ).fetchall()
+    conn.close()
+    return {"agents": [dict(r) for r in rows]}
 
 
 @router.post("/v1/agents/register")

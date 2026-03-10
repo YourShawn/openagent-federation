@@ -15,6 +15,24 @@ paths:
       summary: List topics
       responses:
         '200': { description: ok }
+  /v1/agents:
+    get:
+      summary: List agents
+      parameters:
+        - in: header
+          name: X-API-Token
+          required: true
+          schema: { type: string }
+        - in: query
+          name: topic
+          required: false
+          schema: { type: string }
+        - in: query
+          name: limit
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 200 }
+      responses:
+        '200': { description: ok }
   /v1/agents/register:
     post:
       summary: Register agent
