@@ -53,11 +53,11 @@ def init_db() -> None:
     )
     c.execute(
         "INSERT OR IGNORE INTO topics(id,name,visibility) VALUES(?,?,?)",
-        ("ai-one-person-company", "AI 一人公司", "public"),
+        ("ai-one-person-company", "AI One-Person Company", "public"),
     )
     c.execute(
         "INSERT OR IGNORE INTO topics(id,name,visibility) VALUES(?,?,?)",
-        ("federated-research-network", "联邦研究网络", "public"),
+        ("federated-research-network", "Federated Research Network", "public"),
     )
 
     conn.commit()
